@@ -11,9 +11,12 @@ import { Suspense } from "react";
 import { GlobalAudioPlayer } from "@/components/common/global-audio-player";
 import Link from "next/link";
 
-const jetbrainsMono = { variable: "font-mono" };
+const jetbrainsMono = { variable: "--font-jetbrains" };
 const geistSans = { variable: "font-sans" };
 const geistMono = { variable: "font-mono" };
+const poppins = Poppins({ subsets: ["latin"], variable: "--font-poppins", display: "swap" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap" });
+const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cormorant", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://linespedia.com"),
@@ -54,18 +57,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", jetbrainsMono.variable, poppins.variable, playfair.variable, cormorant.variable)} suppressHydrationWarning>
+    <html lang="en" className={cn(jetbrainsMono.variable, poppins.variable, playfair.variable, cormorant.variable)} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <meta name="google-adsense-account" content="ca-pub-1828915420581549" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1828915420581549" crossOrigin="anonymous"></script>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${playfair.variable} ${cormorant.variable} antialiased`}><a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground">Skip to content</a>
+      <body className={`${poppins.variable} ${playfair.variable} ${cormorant.variable} ${jetbrainsMono.variable} antialiased`}><a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground">Skip to content</a>
         <HexclaveProvider app={hexclaveServerApp}>
           <HexclaveTheme>
             <Providers>
               <div className="flex min-h-screen flex-col bg-background text-foreground antialiased">
-                <Suspense fallback={<div className="h-14 border-b border-border/20 bg-background" />}>
+                <Suspense fallback={<div className="h-[4.5rem] border-b border-border/30 bg-background/90" />}>
                   <Navigation />
                 </Suspense>
                 <main id="content" className="flex-1">

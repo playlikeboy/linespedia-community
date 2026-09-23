@@ -7,7 +7,7 @@ import { PostCard } from "@/components/feed/post-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Activity, PlusCircle, Sparkles, Trophy, MessageSquare } from "lucide-react";
+import { Activity, PlusCircle, Sparkles, Trophy, MessageSquare, ArrowRight } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
@@ -80,17 +80,45 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
   }, [hasNextPage, isFetchingNextPage, setSize]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+    <div className="mx-auto max-w-6xl px-4 pb-20 sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden border-b border-border/30 py-14 md:py-20">
+          <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-accent/10 blur-3xl" />
+          <div className="max-w-3xl">
+            <p className="font-utility text-[10px] font-medium uppercase tracking-[0.22em] text-accent">Linespedia Community</p>
+            <h1 className="mt-4 font-display text-5xl font-semibold leading-[0.95] tracking-[-0.045em] text-foreground sm:text-6xl md:text-7xl">
+              Words for the feeling
+              <span className="block text-accent">you can&apos;t name.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl font-reading text-[1.35rem] leading-relaxed text-muted-foreground md:text-[1.55rem]">
+              Read thoughtful poems, shayari, stories, and fragments from a community that believes a few honest lines can change the shape of a day.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/explore" className={buttonVariants({ size: "lg", className: "rounded-full px-6" })}>
+                Explore writings
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+              <Link href="/create" className={buttonVariants({ size: "lg", variant: "outline", className: "rounded-full px-6" })}>
+                Write something
+              </Link>
+            </div>
+            <div className="mt-8 flex flex-wrap items-center gap-2">
+              {["love","sad","hope","peace","nostalgia","motivation"].map((emotion) => (
+                <Link key={emotion} href={"/emotion/" + emotion} className="rounded-full border border-border/60 bg-card/55 px-3.5 py-1.5 text-xs font-medium capitalize text-muted-foreground hover:border-accent/40 hover:text-foreground">
+                  {emotion}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-4">
         {/* Main Content Area */}
-        <div className="lg:col-span-4 space-y-6 max-w-3xl mx-auto w-full">
+        <div className="lg:col-span-3 min-w-0 space-y-6">
           {/* Header section */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/20 pb-4">
+          <div className="flex flex-col gap-4 border-b border-border/25 pb-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight">A place for words</h1>
-              <p className="text-xs text-muted-foreground">
-                Read, feel, and share thoughts organized by emotions.
-              </p>
+              <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">The community feed</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Fresh writing, organized by how it feels.</p>
             </div>
             <Link href="/create" className={buttonVariants({ size: "sm", className: "rounded-full px-5" })}>
               <PlusCircle className="mr-2 h-4 w-4" />
@@ -99,7 +127,7 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
           </div>
 
           <Tabs value={feedType} onValueChange={handleFeedChange} className="w-full">
-            <TabsList className="grid w-full grid-cols-4 bg-muted/20">
+            <TabsList className="grid w-full grid-cols-4 rounded-xl bg-muted/30 p-1">
               <TabsTrigger value="for-you" className="text-xs">For You</TabsTrigger>
               <TabsTrigger value="latest" className="text-xs">Latest</TabsTrigger>
               <TabsTrigger value="following" className="text-xs">Following</TabsTrigger>
@@ -109,7 +137,7 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
 
           {/* Feed Items */}
           {isLoading ? (
-            <div className="space-y-4">
+            <div className="space-y-0 divide-y divide-border/30">
               {[1, 2, 3].map((n) => (
                 <div key={n} className="border border-border/40 p-5 space-y-3">
                   <div className="flex items-center gap-3">
@@ -143,11 +171,11 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
               ))}
               <div ref={observerTarget} className="flex justify-center py-6">
                 {hasNextPage ? (
-                  <span className="text-[10px] font-mono text-muted-foreground animate-pulse uppercase tracking-widest">
+                  <span className="font-utility text-[9px] text-muted-foreground animate-pulse uppercase tracking-widest">
                     Loading more lines...
                   </span>
                 ) : (
-                  <span className="text-[10px] font-mono text-muted-foreground/40 uppercase tracking-widest">
+                  <span className="font-utility text-[9px] text-muted-foreground/40 uppercase tracking-widest">
                     End of feed
                   </span>
                 )}
@@ -157,9 +185,9 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
         </div>
 
         {/* Sidebar widgets */}
-        <div className="hidden lg:block space-y-6">
+        <aside className="hidden lg:block space-y-5" aria-label="Community discovery">
           {/* Weekly Prompt Challenge */}
-          <div className="border border-border/40 p-4 bg-muted/5 space-y-3 font-mono">
+          <div className="rounded-2xl border border-border/50 bg-card/45 p-5 space-y-3 font-sans">
             <div className="flex items-center gap-2 text-[10px] text-primary font-bold uppercase tracking-wider">
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               <span>Weekly Prompt Challenge</span>
@@ -195,8 +223,8 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
           </div>
 
           {/* Trending emotions */}
-          <div className="border border-border/40 p-4 bg-muted/5">
-            <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase mb-3 flex items-center gap-1.5">
+          <div className="rounded-2xl border border-border/50 bg-card/45 p-5">
+            <h2 className="text-[10px] font-semibold tracking-[0.16em] text-muted-foreground uppercase mb-3 flex items-center gap-1.5">
               <Activity className="h-3.5 w-3.5" />
               Explore Emotions
             </h2>
@@ -230,7 +258,7 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
           <RecentInteractionsWidget />
 
           {/* Guidelines */}
-          <div className="border border-border/40 p-4 text-xs space-y-2.5 font-mono text-muted-foreground">
+          <div className="rounded-2xl border border-border/50 bg-card/45 p-5 text-xs space-y-2.5 text-muted-foreground">
             <h3 className="font-bold text-foreground">Writing Guidelines</h3>
             <p>1. Tag your post with the primary emotion that drives it.</p>
             <p>2. Keep layout minimal. Let typography tell your story.</p>
@@ -265,7 +293,7 @@ function RandomLinesWidget() {
   }, []);
 
   return (
-    <div className="border border-border/40 p-4 bg-muted/5 font-mono">
+    <div className="rounded-2xl border border-border/50 bg-card/45 p-5">
       <div className="flex items-center justify-between mb-3 border-b border-border/10 pb-2">
         <h2 className="text-xs font-bold tracking-wider text-muted-foreground uppercase flex items-center gap-1.5">
           <Sparkles className="h-3.5 w-3.5" />

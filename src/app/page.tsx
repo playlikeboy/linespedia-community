@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import { HomeFeed } from "@/components/feed/home-feed";
 import { Metadata } from "next";
 import { getInitialWritings } from "@/lib/db-queries";
@@ -54,9 +53,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Suspense fallback={<div className="text-center py-16 text-xs text-muted-foreground font-mono">Loading feed...</div>}>
-        <HomeFeed initialFeedType={feedType as any} initialWritings={initialWritings} />
-      </Suspense>
+      <HomeFeed initialFeedType={feedType as any} initialWritings={initialWritings} />
     </>
   );
 }
