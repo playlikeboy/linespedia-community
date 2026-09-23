@@ -36,7 +36,7 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       title={`Switch to ${theme === "light" ? "Dark" : "Light"} Mode`}
-      className="inline-flex items-center justify-center h-9 w-9 rounded-full border border-border/40 hover:bg-muted/10 transition-all active:scale-95 cursor-pointer text-muted-foreground hover:text-foreground bg-background"
+      className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-border/50 hover:bg-muted transition-all active:scale-95 cursor-pointer text-muted-foreground hover:text-foreground bg-background"
     >
       {theme === "light" ? (
         <Moon className="h-4 w-4" />
