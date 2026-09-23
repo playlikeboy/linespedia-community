@@ -11,7 +11,7 @@ import { Suspense } from "react";
 import { GlobalAudioPlayer } from "@/components/common/global-audio-player";
 import Link from "next/link";
 
-const jetbrainsMono = { variable: "font-mono" };
+const jetbrainsMono = { variable: "--font-jetbrains" };
 const geistSans = { variable: "font-sans" };
 const geistMono = { variable: "font-mono" };
 
@@ -65,7 +65,7 @@ export default function RootLayout({
           <HexclaveTheme>
             <Providers>
               <div className="flex min-h-screen flex-col bg-background text-foreground antialiased">
-                <Suspense fallback={<div className="h-14 border-b border-border/20 bg-background" />}>
+                <Suspense fallback={<div className="h-[4.5rem] border-b border-border/30 bg-background/90" />}>
                   <Navigation />
                 </Suspense>
                 <main id="content" className="flex-1">
