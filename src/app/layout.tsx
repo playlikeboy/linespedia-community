@@ -53,21 +53,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-mono", jetbrainsMono.variable)} suppressHydrationWarning>
+    <html lang="en" className={cn("font-sans", jetbrainsMono.variable)} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <meta name="google-adsense-account" content="ca-pub-1828915420581549" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1828915420581549" crossOrigin="anonymous"></script>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}><a href="#content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-foreground">Skip to content</a>
         <HexclaveProvider app={hexclaveServerApp}>
           <HexclaveTheme>
             <Providers>
-              <div className="flex min-h-screen flex-col bg-background text-foreground antialiased font-mono">
+              <div className="flex min-h-screen flex-col bg-background text-foreground antialiased">
                 <Suspense fallback={<div className="h-14 border-b border-border/20 bg-background" />}>
                   <Navigation />
                 </Suspense>
-                <main className="flex-1">
+                <main id="content" className="flex-1">
                   {children}
                 </main>
                 <footer className="border-t border-border/40 py-6">
