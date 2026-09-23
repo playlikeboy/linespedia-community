@@ -86,7 +86,7 @@ export function Navigation() {
             className="relative h-10 w-10 rounded-full p-0 sm:w-[210px] sm:justify-start sm:px-4 sm:py-2"
           >
             <Search className="h-4 w-4 md:mr-2 opacity-70" />
-            <span className="hidden sm:inline-flex text-xs text-muted-foreground">Search...</span>
+            <span className="hidden sm:inline-flex text-xs text-muted-foreground">Search writings</span>
             <kbd className="pointer-events-none absolute right-3 hidden h-5 select-none items-center gap-1 rounded-md border border-border/50 bg-muted/60 px-1.5 font-utility text-[9px] font-medium opacity-100 sm:flex">
               <span className="text-xs">⌘</span>K
             </kbd>
