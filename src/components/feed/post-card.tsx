@@ -19,7 +19,7 @@ interface PostCardProps {
     readingTime: number;
     views: number;
     createdAt: string | Date;
-    reactions?: Record<string, number> | null;
+    reactions?: Record<string, number> | null;\n    userReaction?: string | null;\n    isBookmarked?: boolean;
     author: {
       username: string;
       displayName: string | null;
@@ -41,7 +41,7 @@ export function PostCard({ post }: PostCardProps) {
     .slice(0, 160) + (post.content.length > 160 ? "..." : "");
 
   return (
-    <article className="border border-border/40 bg-background/50 hover:bg-muted/10 p-5 transition-all group duration-200">
+    <article className="border-y border-border/60 bg-background/35 px-4 py-6 sm:px-6 sm:py-7 transition-colors group duration-200 hover:bg-background/60">
       <div className="flex items-center gap-3 mb-3">
         <Link href={`/profile/${post.author.username}`}>
           <Avatar className="h-7 w-7">
@@ -63,10 +63,10 @@ export function PostCard({ post }: PostCardProps) {
       </div>
 
       <Link href={`/post/${post.slug}`} className="block group-hover:translate-x-0.5 transition-transform duration-200">
-        <h2 className="text-base font-bold tracking-tight text-foreground group-hover:text-primary transition-colors mb-2">
+        <h2 className="font-display text-2xl md:text-[1.7rem] font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors mb-2">
           {post.title}
         </h2>
-        <p className="text-xs text-muted-foreground font-mono leading-relaxed mb-4">
+        <p className="font-reading text-lg leading-relaxed text-muted-foreground mb-5 line-clamp-4">
           {plainTextPreview}
         </p>
       </Link>
@@ -84,8 +84,8 @@ export function PostCard({ post }: PostCardProps) {
         </div>
 
         <div className="flex items-center gap-4 text-[10px] text-muted-foreground font-mono">
-          <PostCardReactionButton writingId={post.id} initialReactions={post.reactions || {}} />
-          <PostCardSaveButton writingId={post.id} />
+          <PostCardReactionButton writingId={post.id} initialReactions={post.reactions || {}} initialUserReaction={post.userReaction} />
+          <PostCardSaveButton writingId={post.id} initialBookmarked={!!post.isBookmarked} />
           <span className="flex items-center gap-1">
             <Clock className="h-3.5 w-3.5 opacity-70" />
             {post.readingTime} min
@@ -103,33 +103,14 @@ export function PostCard({ post }: PostCardProps) {
 import { Heart, Bookmark } from "lucide-react";
 import { useUser, useHexclaveApp } from "@hexclave/next";
 import { toast } from "sonner";
-import useSWR from "swr";
 import * as React from "react";
 
-function PostCardReactionButton({ writingId, initialReactions }: { writingId: string, initialReactions: Record<string, number> }) {
+function PostCardReactionButton({ writingId, initialReactions, initialUserReaction }: { writingId: string, initialReactions: Record<string, number>, initialUserReaction?: string | null }) {
   const hexclaveUser = useUser();
   const hexclaveApp = useHexclaveApp();
-
   const [reactions, setReactions] = React.useState(initialReactions);
-  const [userReaction, setUserReaction] = React.useState<string | null>(null);
+  const [userReaction, setUserReaction] = React.useState<string | null>(initialUserReaction || null);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  const { data: writingData } = useSWR(
-    hexclaveUser ? `/api/v1/writings/${writingId}` : null,
-    async (url) => {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error();
-      const json = await res.json() as any;
-      return json.data;
-    }
-  );
-
-  React.useEffect(() => {
-    if (writingData) {
-      if (writingData.reactions) setReactions(writingData.reactions);
-      setUserReaction(writingData.userReaction || null);
-    }
-  }, [writingData]);
 
   const handleReact = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -137,34 +118,28 @@ function PostCardReactionButton({ writingId, initialReactions }: { writingId: st
 
     if (!hexclaveUser) {
       toast("Please sign in to react to writings", {
-        action: {
-          label: "Sign In",
-          onClick: () => hexclaveApp.redirectToSignIn(),
-        },
+        action: { label: "Sign In", onClick: () => hexclaveApp.redirectToSignIn() },
       });
       return;
     }
 
     if (isSubmitting) return;
-
     const type = "felt_this";
     const previousReactions = { ...reactions };
     const previousUserReaction = userReaction;
-    const newReactions = { ...reactions };
+    const next = { ...reactions };
 
     if (previousUserReaction) {
-      newReactions[previousUserReaction] = Math.max(0, (newReactions[previousUserReaction] || 1) - 1);
+      next[previousUserReaction] = Math.max(0, (next[previousUserReaction] || 1) - 1);
     }
 
-    const isUntoggling = previousUserReaction === type;
-    if (isUntoggling) {
+    if (previousUserReaction === type) {
       setUserReaction(null);
     } else {
       setUserReaction(type);
-      newReactions[type] = (newReactions[type] || 0) + 1;
+      next[type] = (next[type] || 0) + 1;
     }
-
-    setReactions(newReactions);
+    setReactions(next);
     setIsSubmitting(true);
 
     try {
@@ -190,38 +165,20 @@ function PostCardReactionButton({ writingId, initialReactions }: { writingId: st
     <button
       onClick={handleReact}
       disabled={isSubmitting}
-      className={`inline-flex items-center gap-1 hover:scale-105 active:scale-95 transition-all text-muted-foreground hover:text-foreground cursor-pointer ${hasFelt ? "text-rose-500 hover:text-rose-600" : ""}`}
+      aria-label={hasFelt ? "Remove reaction" : "React to this writing"}
+      className={`inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground ${hasFelt ? "text-primary" : ""}`}
     >
-      <Heart className={`h-3.5 w-3.5 ${hasFelt ? "fill-rose-500 stroke-rose-500" : "opacity-70"}`} />
+      <Heart className={`h-3.5 w-3.5 ${hasFelt ? "fill-current" : ""}`} />
       <span>{total > 0 ? total : "React"}</span>
     </button>
   );
 }
 
-function PostCardSaveButton({ writingId }: { writingId: string }) {
+function PostCardSaveButton({ writingId, initialBookmarked = false }: { writingId: string, initialBookmarked?: boolean }) {
   const hexclaveUser = useUser();
   const hexclaveApp = useHexclaveApp();
-
-  const [bookmarked, setBookmarked] = React.useState(false);
+  const [bookmarked, setBookmarked] = React.useState(initialBookmarked);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
-  const { data: bookmarkData } = useSWR(
-    hexclaveUser ? "/api/v1/bookmarks" : null,
-    async (url) => {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error();
-      return res.json() as any;
-    }
-  );
-
-  const isBookmarkedInDb = React.useMemo(() => {
-    if (!bookmarkData?.data) return false;
-    return bookmarkData.data.some((b: any) => b.id === writingId);
-  }, [bookmarkData, writingId]);
-
-  React.useEffect(() => {
-    setBookmarked(isBookmarkedInDb);
-  }, [isBookmarkedInDb]);
 
   const handleBookmark = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -229,29 +186,25 @@ function PostCardSaveButton({ writingId }: { writingId: string }) {
 
     if (!hexclaveUser) {
       toast("Please sign in to save writings", {
-        action: {
-          label: "Sign In",
-          onClick: () => hexclaveApp.redirectToSignIn(),
-        },
+        action: { label: "Sign In", onClick: () => hexclaveApp.redirectToSignIn() },
       });
       return;
     }
 
     if (isSubmitting) return;
-
-    const prevBookmarked = bookmarked;
-    setBookmarked(!prevBookmarked);
+    const previous = bookmarked;
+    setBookmarked(!previous);
     setIsSubmitting(true);
 
     try {
       const res = await fetch(`/api/v1/writings/${writingId}/bookmark`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ folderName: "All" }),
       });
       if (!res.ok) throw new Error();
     } catch {
-      setBookmarked(prevBookmarked);
+      setBookmarked(previous);
       toast.error("Failed to update save status");
     } finally {
       setIsSubmitting(false);
@@ -262,9 +215,10 @@ function PostCardSaveButton({ writingId }: { writingId: string }) {
     <button
       onClick={handleBookmark}
       disabled={isSubmitting}
-      className={`inline-flex items-center gap-1 hover:scale-105 active:scale-95 transition-all text-muted-foreground hover:text-foreground cursor-pointer ${bookmarked ? "text-emerald-500 hover:text-emerald-600" : ""}`}
+      aria-label={bookmarked ? "Remove bookmark" : "Save writing"}
+      className={`inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground ${bookmarked ? "text-primary" : ""}`}
     >
-      <Bookmark className={`h-3.5 w-3.5 ${bookmarked ? "fill-emerald-500 stroke-emerald-500" : "opacity-70"}`} />
+      <Bookmark className={`h-3.5 w-3.5 ${bookmarked ? "fill-current" : ""}`} />
       <span>{bookmarked ? "Saved" : "Save"}</span>
     </button>
   );

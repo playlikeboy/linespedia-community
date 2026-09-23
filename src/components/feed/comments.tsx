@@ -212,7 +212,7 @@ export function CommentsSection({ writingId }: CommentsProps) {
                 <AvatarImage src={comment.user.avatar || ""} />
                 <AvatarFallback className="text-[9px]">{comment.user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
-              <span className="text-xs font-bold font-mono">{comment.user.displayName || comment.user.username}</span>
+              <span className="text-xs font-semibold font-sans">{comment.user.displayName || comment.user.username}</span>
             </Link>
             {comment.rating && (
               <span className="flex items-center gap-0.5 text-amber-500 text-[10px] ml-1 bg-amber-500/10 px-1 py-0.2">
@@ -220,7 +220,7 @@ export function CommentsSection({ writingId }: CommentsProps) {
                 <span className="font-bold">{comment.rating}</span>
               </span>
             )}
-            <span className="text-[10px] text-muted-foreground font-mono">
+            <span className="text-[10px] text-muted-foreground font-sans">
               {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
             </span>
           </div>
@@ -241,7 +241,7 @@ export function CommentsSection({ writingId }: CommentsProps) {
           )}
         </div>
 
-        <p className="text-xs text-foreground font-mono leading-relaxed pl-8">{comment.content}</p>
+        <p className="font-reading text-base text-foreground leading-relaxed pl-8">{comment.content}</p>
 
         <div className="pl-8 flex items-center gap-4">
           <button
@@ -252,7 +252,7 @@ export function CommentsSection({ writingId }: CommentsProps) {
               }
               handleLike(comment.id);
             }}
-            className={`flex items-center gap-1.5 text-[10px] font-mono transition-colors ${
+            className={`flex items-center gap-1.5 text-[10px] font-sans transition-colors ${
               comment.hasLiked ? "text-rose-500 font-bold" : "text-muted-foreground hover:text-foreground"
             }`}
           >

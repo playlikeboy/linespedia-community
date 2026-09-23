@@ -83,16 +83,16 @@ export function HomeFeed({ initialFeedType = "for-you", initialWritings = [] }: 
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
         {/* Main Content Area */}
-        <div className="lg:col-span-3 space-y-6 max-w-2xl mx-auto w-full">
+        <div className="lg:col-span-4 space-y-6 max-w-3xl mx-auto w-full">
           {/* Header section */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-border/20 pb-4">
             <div>
-              <h1 className="text-xl font-bold tracking-tight">Writings</h1>
+              <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight">A place for words</h1>
               <p className="text-xs text-muted-foreground">
                 Read, feel, and share thoughts organized by emotions.
               </p>
             </div>
-            <Link href="/create" className={buttonVariants({ size: "sm" })}>
+            <Link href="/create" className={buttonVariants({ size: "sm", className: "rounded-full px-5" })}>
               <PlusCircle className="mr-2 h-4 w-4" />
               New Writing
             </Link>

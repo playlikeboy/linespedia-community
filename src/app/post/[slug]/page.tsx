@@ -190,15 +190,13 @@ export default async function PostPage({ params }: PostPageProps) {
     ? dbReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
     : 5.0;
 
-  const isPoetry = ["poetry", "poem", "shayari", "lyrics"].some(
-    (kw) =>
-      result.writing.primaryEmotion?.toLowerCase() === kw ||
-      result.writing.tags?.some((t: string) => t.toLowerCase().includes(kw))
-  ) || true;
+  // Community writings can be poems, shayari, stories, quotes, or thoughts.
+  // Keep the structured data generic until an explicit content-type field exists.
+  const structuredWorkType = "CreativeWork";
 
   const jsonLd: any = {
     "@context": "https://schema.org",
-    "@type": isPoetry ? "Poem" : "Article",
+    "@type": structuredWorkType,
     "headline": result.writing.title,
     "description": result.writing.content.replace(/<[^>]*>/g, "").slice(0, 160),
     "datePublished": result.writing.publishedAt?.toISOString(),
@@ -269,7 +267,7 @@ export default async function PostPage({ params }: PostPageProps) {
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 md:py-14">
       {/* Schema.org Poem/Article and Breadcrumb metadata */}
       <script
         type="application/ld+json"
