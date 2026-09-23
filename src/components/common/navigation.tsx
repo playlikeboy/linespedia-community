@@ -45,16 +45,16 @@ export function Navigation() {
   ];
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/90 backdrop-blur-xl">
+      <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Left section: Logo & Nav items */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="font-mono text-base font-bold tracking-tight">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <span className="font-display text-[1.65rem] font-bold tracking-[-0.035em]">
               linespedia
             </span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             {navigationItems.map((item) => {
               const Icon = item.icon;
               const isActive = pathname === item.href;
@@ -75,7 +75,7 @@ export function Navigation() {
         </div>
 
         {/* Right section: Actions & Profile */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <ThemeToggle />
           
           {/* Search Button */}
@@ -83,11 +83,11 @@ export function Navigation() {
             variant="outline"
             size="sm"
             onClick={() => setCmdKOpen(true)}
-            className="relative h-9 w-9 p-0 md:w-40 md:justify-start md:px-3 md:py-2"
+            className="relative h-10 w-10 rounded-full p-0 sm:w-[210px] sm:justify-start sm:px-4 sm:py-2"
           >
             <Search className="h-4 w-4 md:mr-2 opacity-70" />
-            <span className="hidden md:inline-flex text-xs text-muted-foreground">Search...</span>
-            <kbd className="pointer-events-none absolute right-1.5 hidden h-5 select-none items-center gap-1 border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 md:flex">
+            <span className="hidden sm:inline-flex text-xs text-muted-foreground">Search...</span>
+            <kbd className="pointer-events-none absolute right-3 hidden h-5 select-none items-center gap-1 rounded-md border border-border/50 bg-muted/60 px-1.5 font-utility text-[9px] font-medium opacity-100 sm:flex">
               <span className="text-xs">⌘</span>K
             </kbd>
           </Button>
@@ -159,7 +159,7 @@ export function Navigation() {
                     onClick={async () => {
                       await hexclaveApp.redirectToSignOut();
                     }}
-                    className="cursor-pointer text-red-600 focus:text-red-600"
+                    className="cursor-pointer rounded-lg text-red-600 focus:text-red-600"
                   >
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
@@ -196,12 +196,12 @@ export function Navigation() {
                 <Menu className="h-5 w-5" />
               </Button>
             } />
-            <SheetContent side="right" className="w-[240px] sm:w-[280px] p-0 border-l border-border/45 bg-background font-mono">
+            <SheetContent side="right" className="w-[300px] p-0 border-l border-border/45 bg-background">
               <div className="flex flex-col h-full justify-between p-6">
                 <div className="space-y-6">
                   {/* Brand header */}
                   <div className="border-b border-border/20 pb-4">
-                    <span className="font-mono text-base font-bold tracking-tight text-foreground">
+                    <span className="font-display text-2xl font-bold tracking-tight text-foreground">
                       linespedia
                     </span>
                   </div>
@@ -223,13 +223,13 @@ export function Navigation() {
                   )}
 
                   {/* Nav Links */}
-                  <nav className="flex flex-col gap-3.5 text-[10px] font-bold uppercase tracking-wider">
+                  <nav className="flex flex-col gap-1 text-sm font-medium">
                     <Link href="/" className="hover:text-primary transition-colors py-1 text-foreground">Home</Link>
                     {navigationItems.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
-                        className="text-muted-foreground hover:text-foreground transition-colors py-1"
+                        className="rounded-xl px-3 py-2.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                       >
                         {item.name}
                       </Link>
