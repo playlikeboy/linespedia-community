@@ -190,11 +190,9 @@ export default async function PostPage({ params }: PostPageProps) {
     ? dbReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
     : 5.0;
 
-  const isPoetry = ["poetry", "poem", "shayari", "lyrics"].some(
-    (kw) =>
-      result.writing.primaryEmotion?.toLowerCase() === kw ||
-      result.writing.tags?.some((t: string) => t.toLowerCase().includes(kw))
-  ) || true;
+  // Community writings can be poems, shayari, stories, quotes, or thoughts.
+  // Keep the structured data generic until an explicit content-type field exists.
+  const structuredWorkType = "CreativeWork";
 
   const jsonLd: any = {
     "@context": "https://schema.org",
