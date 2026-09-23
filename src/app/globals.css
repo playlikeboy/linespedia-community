@@ -5,117 +5,128 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-poppins);
   --font-display: var(--font-playfair);
   --font-reading: var(--font-cormorant);
   --font-mono: var(--font-jetbrains);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --radius-sm: 0.35rem;
-  --radius-md: 0.55rem;
-  --radius-lg: 0.8rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.25rem;
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: .5rem;
+  --radius-md: .75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.35rem;
+  --radius-2xl: 1.6rem;
 }
 
 :root {
   --font-poppins: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-playfair: "Playfair Display", Georgia, serif;
   --font-cormorant: "Cormorant Garamond", "Times New Roman", serif;
-  --font-jetbrains: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-jetbrains: "JetBrains Mono", ui-monospace, monospace;
   --background: oklch(0.965 0.012 85);
-  --foreground: oklch(0.23 0.018 60);
+  --foreground: oklch(0.24 0.018 60);
   --card: oklch(0.985 0.008 85);
-  --card-foreground: oklch(0.23 0.018 60);
+  --card-foreground: oklch(0.24 0.018 60);
   --popover: oklch(0.985 0.008 85);
-  --popover-foreground: oklch(0.23 0.018 60);
-  --primary: oklch(0.45 0.08 45);
+  --popover-foreground: oklch(0.24 0.018 60);
+  --primary: oklch(0.39 0.06 45);
   --primary-foreground: oklch(0.985 0.008 85);
   --muted: oklch(0.925 0.018 80);
-  --muted-foreground: oklch(0.48 0.025 70);
-  --accent: oklch(0.63 0.12 55);
+  --muted-foreground: oklch(0.5 0.025 70);
+  --accent: oklch(0.63 0.11 55);
   --accent-foreground: oklch(0.22 0.02 60);
   --border: oklch(0.84 0.025 75);
   --input: oklch(0.84 0.025 75);
-  --ring: oklch(0.63 0.12 55);
+  --ring: oklch(0.63 0.11 55);
 }
 
 .dark {
   --background: oklch(0.16 0.012 55);
-  --foreground: oklch(0.9 0.025 80);
+  --foreground: oklch(0.91 0.024 80);
   --card: oklch(0.2 0.015 55);
-  --card-foreground: oklch(0.9 0.025 80);
+  --card-foreground: oklch(0.91 0.024 80);
   --popover: oklch(0.2 0.015 55);
-  --popover-foreground: oklch(0.9 0.025 80);
-  --primary: oklch(0.72 0.085 70);
+  --popover-foreground: oklch(0.91 0.024 80);
+  --primary: oklch(0.74 0.08 70);
   --primary-foreground: oklch(0.16 0.012 55);
   --muted: oklch(0.25 0.02 55);
   --muted-foreground: oklch(0.68 0.04 75);
-  --accent: oklch(0.74 0.09 70);
+  --accent: oklch(0.76 0.085 70);
   --accent-foreground: oklch(0.16 0.012 55);
-  --border: oklch(0.3 0.025 55);
-  --input: oklch(0.3 0.025 55);
-  --ring: oklch(0.74 0.09 70);
+  --border: oklch(0.31 0.025 55);
+  --input: oklch(0.31 0.025 55);
+  --ring: oklch(0.76 0.085 70);
 }
 
 @layer base {
-  * { @apply border-border outline-ring/40; }
-  html { @apply font-sans; scroll-behavior: smooth; }
+  * { @apply border-border; }
+
+  html {
+    @apply font-sans;
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     background-image:
-      radial-gradient(circle at 50% 0%, rgba(150, 100, 60, 0.06), transparent 42%),
-      linear-gradient(to bottom, rgba(125, 84, 48, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 32px;
+      radial-gradient(circle at 50% 0%, rgba(176, 107, 47, 0.055), transparent 40%),
+      linear-gradient(to bottom, rgba(120, 84, 48, 0.018) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 34px;
     overflow-x: hidden;
   }
+
   .dark body {
     background-image:
-      radial-gradient(circle at 50% 0%, rgba(220, 180, 120, 0.025), transparent 45%),
+      radial-gradient(circle at 50% 0%, rgba(220, 180, 120, 0.03), transparent 45%),
       linear-gradient(to bottom, rgba(220, 180, 120, 0.018) 1px, transparent 1px);
   }
-  a, button, input, textarea, select, [role="button"] {
+
+  ::selection { background: color-mix(in oklab, var(--accent) 24%, transparent); }
+  :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+
+  a, button, input, textarea, select {
     transition: color .18s ease, background-color .18s ease, border-color .18s ease, opacity .18s ease, transform .18s ease;
   }
-  button:active, a:active, [role="button"]:active { transform: translateY(1px); }
-  :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
-  ::selection { background: color-mix(in oklab, var(--accent) 28%, transparent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: .01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: .01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 .font-display { font-family: var(--font-playfair); }
 .font-reading { font-family: var(--font-cormorant); }
 .font-utility { font-family: var(--font-jetbrains); }
 
-.poem-prose {
+.reader-text {
   font-family: var(--font-cormorant);
-  font-size: clamp(1.35rem, 2.1vw, 2.05rem);
-  line-height: 1.65;
-  letter-spacing: 0.005em;
+  font-size: clamp(1.2rem, 1.7vw, 1.7rem);
+  line-height: 1.72;
 }
 
-.prose-editorial {
-  max-width: 72ch;
-  line-height: 1.8;
-  font-size: 1.05rem;
+.editorial-copy {
+  max-width: 68ch;
+  font-size: 1.02rem;
+  line-height: 1.85;
 }
 
-@media (max-width: 640px) {
-  .poem-prose { font-size: 1.3rem; line-height: 1.6; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }
+.safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
