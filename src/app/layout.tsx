@@ -1,26 +1,18 @@
 import type { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { Poppins, Playfair_Display, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { HexclaveProvider, HexclaveTheme } from "@hexclave/next";
 import { hexclaveServerApp } from "@/hexclave/server";
 import Providers from "@/components/common/providers";
 import { Navigation } from "@/components/common/navigation";
-const CmdKDialog = dynamic(
-  () => import("@/components/common/cmd-k").then((mod) => mod.CmdKDialog),
-  { ssr: false }
-);
-const GlobalAudioPlayer = dynamic(
-  () => import("@/components/common/global-audio-player").then((mod) => mod.GlobalAudioPlayer),
-  { ssr: false }
-);
-import { Suspense } from "react";
+import { CmdKDialog } from "@/components/common/cmd-k";
+import { GlobalAudioPlayer } from "@/components/common/global-audio-player";
 import Link from "next/link";
 
-const poppins = Poppins({ subsets: ["latin"], variable: "--font-poppins", display: "swap", preload: true });
-const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap", preload: true });
-const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cormorant", display: "swap", preload: false });
-const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap", preload: false });
+const poppins = Poppins({ subsets: ["latin"], variable: "--font-poppins", display: "swap", preload: true, weight: ["400","500","600","700"] });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", display: "swap", preload: true, weight: ["600","700"] });
+const cormorant = Cormorant_Garamond({ subsets: ["latin"], variable: "--font-cormorant", display: "swap", preload: false, weight: ["400","500","600"] });
+const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains", display: "swap", preload: false, weight: ["400","500"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://linespedia.com"),
@@ -61,9 +53,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <HexclaveTheme>
             <Providers>
               <div className="flex min-h-screen flex-col bg-background text-foreground antialiased">
-                <Suspense fallback={<div className="h-[4rem] border-b border-border/30 bg-background" />}>
-                  <Navigation />
-                </Suspense>
+                <Navigation />
                 <main id="content" className="flex-1">{children}</main>
                 <footer className="border-t border-border/40 py-6">
                   <div className="mx-auto flex flex-col items-center justify-between gap-4 md:h-14 md:flex-row max-w-7xl px-4 sm:px-6 lg:px-8 text-xs text-muted-foreground">
