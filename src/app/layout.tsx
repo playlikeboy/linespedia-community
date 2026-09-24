@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { Poppins, Playfair_Display, Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { HexclaveProvider, HexclaveTheme } from "@hexclave/next";
 import { hexclaveServerApp } from "@/hexclave/server";
 import Providers from "@/components/common/providers";
 import { Navigation } from "@/components/common/navigation";
-import { CmdKDialog } from "@/components/common/cmd-k";
+const CmdKDialog = dynamic(
+  () => import("@/components/common/cmd-k").then((mod) => mod.CmdKDialog),
+  { ssr: false }
+);
+const GlobalAudioPlayer = dynamic(
+  () => import("@/components/common/global-audio-player").then((mod) => mod.GlobalAudioPlayer),
+  { ssr: false }
+);
 import { Suspense } from "react";
 import Link from "next/link";
 
@@ -71,7 +79,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   </div>
                 </footer>
               </div>
-              <CmdKDialog />
+              <>
+                <CmdKDialog />
+                <GlobalAudioPlayer />
+              </>
             </Providers>
           </HexclaveTheme>
         </HexclaveProvider>
