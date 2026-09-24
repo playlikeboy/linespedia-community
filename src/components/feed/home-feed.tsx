@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import { PostCard } from "@/components/feed/post-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -327,17 +326,29 @@ function RandomLinesWidget() {
 }
 
 function TopWritersWidget() {
-  const { data: topAuthorsResult, isLoading } = useSWR(
-    "/api/v1/users/top",
-    async (url) => {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error();
-      const json = await res.json() as any;
-      return json.data || [];
-    }
-  );
+  const [authors, setAuthors] = React.useState<any[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  const authors = topAuthorsResult || [];
+  React.useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/v1/users/top");
+        if (!res.ok) return;
+        const json = await res.json() as any;
+        if (!cancelled) setAuthors(json.data || []);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+    const start = () => void load();
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(start, { timeout: 2500 });
+      return () => { cancelled = true; window.cancelIdleCallback(id); };
+    }
+    const id = window.setTimeout(start, 1200);
+    return () => { cancelled = true; window.clearTimeout(id); };
+  }, []);
 
   return (
     <div className="border border-border/40 p-4 bg-muted/5 font-mono">
@@ -377,17 +388,29 @@ function TopWritersWidget() {
 }
 
 function RecentInteractionsWidget() {
-  const { data: commentsResult, isLoading } = useSWR(
-    "/api/v1/interactions/recent",
-    async (url) => {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error();
-      const json = await res.json() as any;
-      return json.data || [];
-    }
-  );
+  const [comments, setComments] = React.useState<any[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  const comments = commentsResult || [];
+  React.useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const res = await fetch("/api/v1/interactions/recent");
+        if (!res.ok) return;
+        const json = await res.json() as any;
+        if (!cancelled) setComments(json.data || []);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+    const start = () => void load();
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(start, { timeout: 3500 });
+      return () => { cancelled = true; window.cancelIdleCallback(id); };
+    }
+    const id = window.setTimeout(start, 1800);
+    return () => { cancelled = true; window.clearTimeout(id); };
+  }, []);
 
   return (
     <div className="border border-border/40 p-4 bg-muted/5 font-mono">
