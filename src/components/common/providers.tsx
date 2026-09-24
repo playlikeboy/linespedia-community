@@ -12,12 +12,21 @@ const fetcher = async (url: string) => {
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    if (typeof window !== "undefined" && "serviceWorker" in navigator) {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) return;
+
+    const register = () => {
       navigator.serviceWorker
         .register("/sw.js")
-        .then((reg) => console.log("Service Worker registered successfully:", reg.scope))
         .catch((err) => console.error("Service Worker registration failed:", err));
+    };
+
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(register, { timeout: 3000 });
+      return () => window.cancelIdleCallback(id);
     }
+
+    const id = window.setTimeout(register, 2500);
+    return () => window.clearTimeout(id);
   }, []);
 
   return (
