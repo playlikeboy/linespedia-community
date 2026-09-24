@@ -77,17 +77,25 @@ export function QuoteCardModal({ content, title, authorName, postUrl, ogImageUrl
 
   // Pre-load all theme images
   React.useEffect(() => {
-    THEMES.forEach((t) => {
-      if (t.type === "image" && t.url) {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.src = t.url;
-        img.onload = () => {
+    const loadThemeImages = () => {
+      THEMES.forEach((t) => {
+        if (t.type === "image" && t.url) {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.src = t.url;
+          img.onload = () => {
           loadedImagesRef.current[t.name] = img;
           setImgTick(prev => prev + 1); // trigger preview update
         };
       }
     });
+  };
+  if ("requestIdleCallback" in window) {
+    const id = window.requestIdleCallback(loadThemeImages, { timeout: 3000 });
+    return () => window.cancelIdleCallback(id);
+  }
+  const id = window.setTimeout(loadThemeImages, 1600);
+  return () => window.clearTimeout(id);
   }, []);
 
   const drawCard = React.useCallback((ctx: CanvasRenderingContext2D, width: number, height: number) => {
