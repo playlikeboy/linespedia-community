@@ -9,13 +9,13 @@ export const metadata: Metadata = {
     title: "Linespedia Community",
     description: "The cleanest writing-first social platform organized by emotions. Read, write, and feel poems, stories, and shayari.",
     type: "website",
-    images: [{ url: "https://linespedia.com/og-main.png", width: 1200, height: 1200, alt: "Linespedia Community" }],
+    images: [{ url: "/og-main.png", width: 1200, height: 630, alt: "Linespedia Community" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Linespedia Community",
-    description: "The cleanest writing-first social platform organized by emotions. Read, write, and feel poems, stories, and shayari.",
-    images: ["https://linespedia.com/og-main.png"],
+    description: "Read, write, and feel poems, stories, and shayari. Organized by core human emotions.",
+    images: ["/og-main.png"],
   },
 };
 
@@ -37,22 +37,19 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Linespedia Community",
-    "url": "https://linespedia.com",
-    "description": "The cleanest writing-first social platform organized by emotions. Read, write, and feel poems, stories, and shayari.",
-    "potentialAction": {
+    name: "Linespedia Community",
+    url: "https://linespedia.com",
+    description: "The cleanest writing-first social platform organized by emotions. Read, write, and feel poems, stories, and shayari.",
+    potentialAction: {
       "@type": "SearchAction",
-      "target": "https://linespedia.com/explore?search={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
+      target: "https://linespedia.com/explore?search={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <HomeFeed initialFeedType={feedType as any} initialWritings={initialWritings} />
     </>
   );
